@@ -3,1505 +3,3097 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MediaPipe Hand Pose Editor</title>
+
+<title>Hand Pose Editor</title>
 
 <style>
-  :root {
-    --bg: #f5f3ef;
+
+:root {
+    --bg: #f4f2ee;
     --panel: #ffffff;
-    --ink: #252525;
-    --muted: #777;
+    --border: #e5e1da;
+    --text: #292929;
+    --muted: #77736d;
     --accent: #6c63ff;
-    --accent2: #ff8fab;
-    --border: #e6e2dc;
-  }
+    --pink: #ff7f9c;
+}
 
-  * { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
-  body {
+body {
     margin: 0;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
     background: var(--bg);
-    color: var(--ink);
-  }
+    color: var(--text);
+}
 
-  header {
-    padding: 20px 24px 12px;
-    border-bottom: 1px solid var(--border);
-    background: rgba(255,255,255,.8);
-  }
 
-  header h1 {
-    margin: 0 0 4px;
-    font-size: 22px;
-  }
+/* =========================================================
+   HEADER
+========================================================= */
 
-  header p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 13px;
-  }
+header {
+    height: 72px;
 
-  .app {
-    display: grid;
-    grid-template-columns: 300px minmax(400px, 1fr) 280px;
-    min-height: calc(100vh - 75px);
-  }
-
-  .sidebar {
-    background: var(--panel);
-    padding: 20px;
-    border-right: 1px solid var(--border);
-    overflow-y: auto;
-  }
-
-  .rightbar {
-    background: var(--panel);
-    padding: 20px;
-    border-left: 1px solid var(--border);
-    overflow-y: auto;
-  }
-
-  .canvas-wrap {
     display: flex;
+    align-items: center;
+
+    padding: 0 24px;
+
+    background: rgba(255,255,255,.92);
+
+    border-bottom: 1px solid var(--border);
+}
+
+.header-title {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.header-subtitle {
+    margin-left: 14px;
+
+    font-size: 13px;
+
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   APP LAYOUT
+========================================================= */
+
+.app {
+    display: grid;
+
+    grid-template-columns:
+        280px
+        minmax(450px, 1fr)
+        290px;
+
+    height: calc(100vh - 72px);
+}
+
+
+/* =========================================================
+   SIDEBARS
+========================================================= */
+
+.sidebar,
+.rightbar {
+
+    background: var(--panel);
+
+    padding: 20px;
+
+    overflow-y: auto;
+}
+
+.sidebar {
+
+    border-right:
+        1px solid var(--border);
+}
+
+.rightbar {
+
+    border-left:
+        1px solid var(--border);
+}
+
+
+.section {
+    margin-bottom: 26px;
+}
+
+.section-title {
+
+    margin-bottom: 10px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: .12em;
+
+    color: #77736d;
+}
+
+
+/* =========================================================
+   FORM ELEMENTS
+========================================================= */
+
+label {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-size: 12px;
+
+    color: var(--muted);
+}
+
+
+input[type="text"],
+select {
+
+    width: 100%;
+
+    padding: 10px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 9px;
+
+    background: white;
+
+    color: var(--text);
+
+    font-size: 13px;
+
+    outline: none;
+}
+
+input[type="text"]:focus,
+select:focus {
+
+    border-color:
+        var(--accent);
+}
+
+
+button {
+
+    border:
+        1px solid var(--border);
+
+    background: white;
+
+    color: var(--text);
+
+    padding: 10px 12px;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+    transition:
+        transform .12s,
+        border-color .12s,
+        background .12s;
+}
+
+button:hover {
+
+    transform:
+        translateY(-1px);
+
+    border-color:
+        #bbb5ad;
+}
+
+button.primary {
+
+    background:
+        var(--accent);
+
+    color: white;
+
+    border-color:
+        var(--accent);
+}
+
+button.full {
+
+    width: 100%;
+}
+
+button.danger {
+
+    color:
+        #c0392b;
+}
+
+.button-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 7px;
+
+    margin-top: 8px;
+}
+
+
+/* =========================================================
+   COLOR CONTROLS
+========================================================= */
+
+.color-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+}
+
+.color-label {
+
+    font-size: 13px;
+}
+
+input[type="color"] {
+
+    width: 48px;
+    height: 32px;
+
+    padding: 2px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    background: white;
+}
+
+
+/* =========================================================
+   BACKGROUND PRESETS
+========================================================= */
+
+.background-buttons {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr;
+
+    gap: 6px;
+
+    margin-top: 8px;
+}
+
+.bg-button {
+
+    padding:
+        8px 5px;
+
+    font-size: 11px;
+}
+
+.bg-white {
+    background: white;
+}
+
+.bg-black {
+
+    background: #000;
+    color: white;
+
+    border-color: #000;
+}
+
+.bg-transparent {
+
+    background:
+        repeating-conic-gradient(
+            #ddd 0 25%,
+            white 0 50%
+        )
+        50% / 12px 12px;
+}
+
+
+/* =========================================================
+   CHECKBOX
+========================================================= */
+
+.checkbox-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 10px;
+
+    font-size: 12px;
+
+    color: var(--muted);
+}
+
+.checkbox-row input {
+
+    accent-color:
+        var(--accent);
+}
+
+
+/* =========================================================
+   CANVAS AREA
+========================================================= */
+
+.canvas-wrap {
+
+    display: flex;
+
     align-items: center;
     justify-content: center;
-    padding: 30px;
-    min-height: 600px;
-  }
 
-  #stage {
-    width: min(75vw, 720px);
-    height: min(75vw, 720px);
-    max-width: 720px;
-    max-height: 720px;
+    padding: 30px;
+
+    overflow: auto;
+}
+
+
+/*
+   IMPORTANT:
+   There is deliberately NO checkerboard baked into the SVG.
+
+   The checkerboard below is only used to visualize transparency.
+*/
+
+#stage {
+
+    width:
+        min(72vw, 720px);
+
+    height:
+        min(72vw, 720px);
+
     min-width: 420px;
     min-height: 420px;
-    background:
-      linear-gradient(45deg, #eee 25%, transparent 25%),
-      linear-gradient(-45deg, #eee 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, #eee 75%),
-      linear-gradient(-45deg, transparent 75%, #eee 75%);
-    background-size: 24px 24px;
-    background-position: 0 0, 0 12px, 12px -12px, -12px 0;
-    border-radius: 22px;
-    box-shadow: 0 15px 45px rgba(0,0,0,.10);
-    position: relative;
-    overflow: hidden;
-    user-select: none;
-    touch-action: none;
-  }
 
-  svg {
+    max-width: 720px;
+    max-height: 720px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 18px 50px
+        rgba(0,0,0,.13);
+
+    touch-action: none;
+}
+
+
+/*
+   Transparent background preview.
+*/
+
+#stage.transparent {
+
+    background:
+        repeating-conic-gradient(
+            #e8e8e8 0 25%,
+            #ffffff 0 50%
+        )
+        50% / 24px 24px;
+}
+
+
+#stage.solid {
+
+    background:
+        var(--stage-background);
+}
+
+
+#handSvg {
+
     width: 100%;
     height: 100%;
+
     display: block;
-  }
 
-  .section {
-    margin-bottom: 25px;
-  }
+    overflow: visible;
+}
 
-  .section h2 {
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    margin: 0 0 10px;
-    color: #666;
-  }
 
-  button {
-    border: 1px solid var(--border);
-    background: white;
-    color: var(--ink);
-    padding: 9px 11px;
-    border-radius: 9px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: .15s;
-  }
+/* =========================================================
+   LANDMARK LIST
+========================================================= */
 
-  button:hover {
-    border-color: #bbb;
-    transform: translateY(-1px);
-  }
+.landmark-list {
 
-  button.primary {
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent);
-  }
+    border:
+        1px solid var(--border);
 
-  button.danger {
-    color: #c0392b;
-  }
-
-  .button-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 7px;
-  }
-
-  .full {
-    width: 100%;
-  }
-
-  label {
-    display: block;
-    font-size: 12px;
-    color: #666;
-    margin-bottom: 6px;
-  }
-
-  input[type="text"],
-  select {
-    width: 100%;
-    padding: 9px 10px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: white;
-    font-size: 13px;
-  }
-
-  input[type="color"] {
-    width: 48px;
-    height: 34px;
-    padding: 2px;
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    background: white;
-  }
-
-  .color-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 8px 0;
-  }
-
-  .color-row span {
-    font-size: 13px;
-  }
-
-  .hint {
-    background: #faf8f4;
-    border: 1px solid var(--border);
-    padding: 11px;
     border-radius: 10px;
-    font-size: 12px;
-    line-height: 1.5;
-    color: #666;
-  }
 
-  .landmark-list {
-    max-height: 420px;
-    overflow-y: auto;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-  }
+    overflow: hidden;
+}
 
-  .landmark-row {
+.landmark-row {
+
     display: grid;
-    grid-template-columns: 28px 1fr;
+
+    grid-template-columns:
+        22px 1fr;
+
     align-items: center;
-    padding: 6px 8px;
-    border-bottom: 1px solid #eee;
+
+    padding:
+        7px 9px;
+
+    border-bottom:
+        1px solid #eee;
+
     cursor: pointer;
-  }
+}
 
-  .landmark-row:last-child {
-    border-bottom: 0;
-  }
+.landmark-row:last-child {
 
-  .landmark-row:hover {
-    background: #fafafa;
-  }
+    border-bottom: none;
+}
 
-  .dot {
-    width: 12px;
-    height: 12px;
-    background: var(--accent);
+.landmark-row:hover {
+
+    background:
+        #faf9f7;
+}
+
+.landmark-row.selected {
+
+    background:
+        #f0eeff;
+}
+
+.landmark-dot {
+
+    width: 11px;
+    height: 11px;
+
     border-radius: 50%;
-  }
 
-  .landmark-name {
+    background:
+        var(--pink);
+}
+
+.landmark-name {
+
     font-size: 11px;
-  }
-
-  .landmark-index {
-    color: #999;
-    font-size: 10px;
-  }
-
-  .status {
-    font-size: 11px;
-    color: #777;
-    margin-top: 8px;
-    min-height: 16px;
-  }
-
-  #poseName {
     font-weight: 600;
-  }
+}
 
-  .coords {
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 10px;
-    color: #777;
-  }
+.landmark-coords {
 
-  @media (max-width: 1050px) {
+    margin-top: 2px;
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+    font-size: 9px;
+
+    color: #999;
+}
+
+
+/* =========================================================
+   INFO BOX
+========================================================= */
+
+.info-box {
+
+    padding: 12px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 10px;
+
+    background:
+        #faf8f4;
+
+    font-size: 12px;
+
+    line-height: 1.55;
+
+    color: var(--muted);
+}
+
+.info-box strong {
+
+    color: var(--text);
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+
+    min-height: 17px;
+
+    margin-top: 8px;
+
+    font-size: 11px;
+
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1050px) {
+
     .app {
-      grid-template-columns: 240px 1fr;
+
+        grid-template-columns:
+            250px
+            1fr;
     }
 
     .rightbar {
-      display: none;
-    }
-  }
 
-  @media (max-width: 750px) {
+        display: none;
+    }
+}
+
+
+@media (max-width: 720px) {
+
+    header {
+
+        height: auto;
+
+        padding: 15px;
+    }
+
+    .header-subtitle {
+
+        display: none;
+    }
+
     .app {
-      display: block;
+
+        display: block;
+
+        height: auto;
     }
 
     .sidebar {
-      border-right: 0;
-      border-bottom: 1px solid var(--border);
+
+        border-right: none;
+
+        border-bottom:
+            1px solid var(--border);
     }
 
     .canvas-wrap {
-      padding: 15px;
-      min-height: auto;
+
+        padding: 15px;
     }
 
     #stage {
-      min-width: 300px;
-      min-height: 300px;
-      width: 90vw;
-      height: 90vw;
+
+        width: 92vw;
+        height: 92vw;
+
+        min-width: 300px;
+        min-height: 300px;
     }
-  }
+}
+
 </style>
 </head>
 
+
 <body>
 
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
 <header>
-  <h1>🖐️ MediaPipe Hand Pose Editor</h1>
-  <p>Drag the 21 landmarks to design your own 2D hand gestures.</p>
+
+    <div class="header-title">
+        🖐️ MediaPipe Hand Pose Editor
+    </div>
+
+    <div class="header-subtitle">
+        Drag the 21 landmarks to design your gesture
+    </div>
+
 </header>
+
+
 
 <div class="app">
 
-  <!-- LEFT -->
-  <aside class="sidebar">
+
+<!-- =========================================================
+     LEFT SIDEBAR
+========================================================= -->
+
+<aside class="sidebar">
+
+
+    <!-- POSE -->
+    <div class="section">
+
+        <div class="section-title">
+            POSE
+        </div>
+
+
+        <label>
+            Pose name
+        </label>
+
+        <input
+            id="poseName"
+            type="text"
+            value="open-palm"
+        >
+
+
+        <div style="height:8px"></div>
+
+
+        <select id="preset">
+
+            <option value="">
+                Choose preset...
+            </option>
+
+            <option value="open">
+                🖐️ Open Palm
+            </option>
+
+            <option value="fist">
+                ✊ Fist
+            </option>
+
+            <option value="point">
+                👆 Point
+            </option>
+
+            <option value="peace">
+                ✌️ Peace
+            </option>
+
+            <option value="pinch">
+                🤏 Pinch
+            </option>
+
+            <option value="thumb">
+                👍 Thumbs Up
+            </option>
+
+        </select>
+
+
+        <div class="button-grid">
+
+            <button onclick="resetPose()">
+                Reset
+            </button>
+
+            <button onclick="flipPose()">
+                Flip ↔
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- STYLE -->
+    <div class="section">
+
+        <div class="section-title">
+            STYLE
+        </div>
+
+
+        <div class="color-row">
+
+            <span class="color-label">
+                Bone color
+            </span>
+
+            <input
+                id="boneColor"
+                type="color"
+                value="#292929"
+            >
+
+        </div>
+
+
+        <div class="color-row">
+
+            <span class="color-label">
+                Joint color
+            </span>
+
+            <input
+                id="jointColor"
+                type="color"
+                value="#ff7f9c"
+            >
+
+        </div>
+
+
+        <div class="color-row">
+
+            <span class="color-label">
+                Selected joint
+            </span>
+
+            <input
+                id="selectedColor"
+                type="color"
+                value="#6c63ff"
+            >
+
+        </div>
+
+
+        <div class="color-row">
+
+            <span class="color-label">
+                Background
+            </span>
+
+            <input
+                id="backgroundColor"
+                type="color"
+                value="#ffffff"
+            >
+
+        </div>
+
+
+        <div class="background-buttons">
+
+            <button
+                class="bg-button bg-white"
+                onclick="setBackground('white')"
+            >
+                White
+            </button>
+
+            <button
+                class="bg-button bg-black"
+                onclick="setBackground('black')"
+            >
+                Black
+            </button>
+
+            <button
+                class="bg-button bg-transparent"
+                onclick="setBackground('transparent')"
+            >
+                Clear
+            </button>
+
+        </div>
+
+
+        <label class="checkbox-row">
+
+            <input
+                id="showLandmarks"
+                type="checkbox"
+                checked
+            >
+
+            Show landmark dots
+
+        </label>
+
+
+        <label class="checkbox-row">
+
+            <input
+                id="showNumbers"
+                type="checkbox"
+                checked
+            >
+
+            Show numbers
+
+        </label>
+
+    </div>
+
+
+
+    <!-- EXPORT -->
+    <div class="section">
+
+        <div class="section-title">
+            EXPORT
+        </div>
+
+
+        <button
+            class="primary full"
+            onclick="exportSVG()"
+        >
+            Export SVG
+        </button>
+
+
+        <div style="height:7px"></div>
+
+
+        <button
+            class="full"
+            onclick="exportPNG()"
+        >
+            Export PNG
+        </button>
+
+
+        <div style="height:7px"></div>
+
+
+        <button
+            class="full"
+            onclick="exportJSON()"
+        >
+            Export MediaPipe JSON
+        </button>
+
+
+        <div style="height:7px"></div>
+
+
+        <button
+            class="full"
+            onclick="copyJSON()"
+        >
+            Copy JSON
+        </button>
+
+
+        <div
+            id="status"
+            class="status"
+        ></div>
+
+    </div>
+
+
+
+    <!-- SAVED -->
+    <div class="section">
+
+        <div class="section-title">
+            SAVED POSES
+        </div>
+
+
+        <button
+            class="full"
+            onclick="savePose()"
+        >
+            Save Current Pose
+        </button>
+
+
+        <div style="height:7px"></div>
+
+
+        <select id="savedPoses">
+
+            <option value="">
+                Saved poses...
+            </option>
+
+        </select>
+
+
+        <div style="height:7px"></div>
+
+
+        <button
+            class="full danger"
+            onclick="deleteSavedPose()"
+        >
+            Delete Selected
+        </button>
+
+    </div>
+
+
+
+    <div class="info-box">
+
+        <strong>How to use</strong>
+
+        <br><br>
+
+        Drag any pink landmark.
+
+        <br><br>
+
+        The bones automatically follow
+        the MediaPipe hand topology.
+
+        <br><br>
+
+        No part of the fingers is artificially
+        connected to another finger, so there
+        is no webbed-hand effect.
+
+    </div>
+
+
+</aside>
+
+
+
+<!-- =========================================================
+     CENTER CANVAS
+========================================================= -->
+
+<main class="canvas-wrap">
+
+
+    <div
+        id="stage"
+        class="solid"
+    >
+
+        <svg
+            id="handSvg"
+            viewBox="0 0 1000 1000"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+
+            <!--
+                Background is dynamically inserted here.
+            -->
+
+            <g id="backgroundLayer"></g>
+
+
+            <!--
+                Actual MediaPipe skeleton.
+
+                IMPORTANT:
+                There is NO filled hand polygon.
+            -->
+
+            <g
+                id="bones"
+                fill="none"
+                stroke="#292929"
+                stroke-width="18"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            ></g>
+
+
+            <!--
+                Landmark circles.
+            -->
+
+            <g id="joints"></g>
+
+
+        </svg>
+
+    </div>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     RIGHT SIDEBAR
+========================================================= -->
+
+<aside class="rightbar">
+
 
     <div class="section">
-      <h2>Pose</h2>
 
-      <label for="poseName">Pose name</label>
-      <input id="poseName" type="text" value="open-palm">
+        <div class="section-title">
+            LANDMARKS
+        </div>
 
-      <div style="height:8px"></div>
 
-      <select id="preset">
-        <option value="">Choose preset...</option>
-        <option value="open">🖐️ Open Palm</option>
-        <option value="fist">✊ Fist</option>
-        <option value="point">👆 Point</option>
-        <option value="peace">✌️ Peace</option>
-        <option value="pinch">🤏 Pinch</option>
-        <option value="thumb">👍 Thumbs Up</option>
-      </select>
+        <div
+            id="landmarkList"
+            class="landmark-list"
+        ></div>
 
-      <div style="height:8px"></div>
-
-      <div class="button-grid">
-        <button onclick="resetPose()">Reset</button>
-        <button onclick="flipPose()">Flip ↔</button>
-      </div>
     </div>
+
+
 
     <div class="section">
-      <h2>Style</h2>
 
-      <div class="color-row">
-        <span>Hand fill</span>
-        <input id="handColor" type="color" value="#fffaf2">
-      </div>
+        <div class="section-title">
+            SELECTED POINT
+        </div>
 
-      <div class="color-row">
-        <span>Outline</span>
-        <input id="outlineColor" type="color" value="#292929">
-      </div>
 
-      <div class="color-row">
-        <span>Bone color</span>
-        <input id="boneColor" type="color" value="#292929">
-      </div>
+        <div
+            id="selectedInfo"
+            class="info-box"
+        >
+            Click a landmark.
+        </div>
 
-      <div class="color-row">
-        <span>Joint color</span>
-        <input id="jointColor" type="color" value="#ff7f9c">
-      </div>
     </div>
+
+
 
     <div class="section">
-      <h2>Export</h2>
 
-      <button class="primary full" onclick="exportSVG()">
-        Export SVG
-      </button>
-
-      <div style="height:7px"></div>
-
-      <button class="full" onclick="exportPNG()">
-        Export PNG
-      </button>
-
-      <div style="height:7px"></div>
-
-      <button class="full" onclick="exportJSON()">
-        Export MediaPipe JSON
-      </button>
-
-      <div style="height:7px"></div>
-
-      <button class="full" onclick="copyJSON()">
-        Copy JSON
-      </button>
-
-      <div class="status" id="status"></div>
-    </div>
-
-    <div class="section">
-      <h2>Saved poses</h2>
-
-      <button class="full" onclick="savePose()">
-        Save Current Pose
-      </button>
-
-      <div style="height:7px"></div>
-
-      <select id="savedPoses">
-        <option value="">Saved poses...</option>
-      </select>
-
-      <div style="height:7px"></div>
-
-      <button class="full danger" onclick="deleteSavedPose()">
-        Delete Selected
-      </button>
-    </div>
-
-    <div class="hint">
-      <strong>Tip:</strong><br>
-      Drag any pink joint. The bones follow automatically.
-      The numbers correspond directly to MediaPipe's 21 hand landmarks.
-    </div>
-
-  </aside>
+        <div class="section-title">
+            MEDIAPIPE
+        </div>
 
 
-  <!-- CENTER -->
-  <main class="canvas-wrap">
+        <div class="info-box">
 
-    <div id="stage">
+            Coordinates are normalized.
 
-      <svg
-        id="handSvg"
-        viewBox="0 0 1000 1000"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+            <br><br>
 
-        <!-- hand silhouette -->
-        <path
-          id="handShape"
-          fill="#fffaf2"
-          stroke="#292929"
-          stroke-width="20"
-          stroke-linejoin="round"
-          stroke-linecap="round"
-        />
+            <strong>x = 0</strong>
+            → left
 
-        <!-- bones -->
-        <g
-          id="bones"
-          fill="none"
-          stroke="#292929"
-          stroke-width="15"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
+            <br>
 
-        <!-- joints -->
-        <g id="joints"></g>
+            <strong>x = 1</strong>
+            → right
 
-      </svg>
+            <br>
+
+            <strong>y = 0</strong>
+            → top
+
+            <br>
+
+            <strong>y = 1</strong>
+            → bottom
+
+            <br><br>
+
+            The exported JSON contains
+            all 21 points in MediaPipe order.
+
+        </div>
 
     </div>
 
-  </main>
 
+</aside>
 
-  <!-- RIGHT -->
-  <aside class="rightbar">
-
-    <div class="section">
-      <h2>Landmarks</h2>
-      <div id="landmarkList" class="landmark-list"></div>
-    </div>
-
-    <div class="section">
-      <h2>Selected point</h2>
-      <div id="selectedInfo" class="coords">
-        Click a landmark.
-      </div>
-    </div>
-
-    <div class="hint">
-      MediaPipe uses normalized coordinates:
-      <br><br>
-      <strong>x = 0</strong> left<br>
-      <strong>x = 1</strong> right<br>
-      <strong>y = 0</strong> top<br>
-      <strong>y = 1</strong> bottom
-      <br><br>
-      This editor exports those normalized 2D coordinates.
-    </div>
-
-  </aside>
 
 </div>
 
 
+
 <script>
 
-/*
-  ============================================================
-  MediaPipe 21 Landmark Hand Pose Editor
-  ============================================================
 
-  Landmark numbering:
-
-  0  WRIST
-
-  1  THUMB_CMC
-  2  THUMB_MCP
-  3  THUMB_IP
-  4  THUMB_TIP
-
-  5  INDEX_FINGER_MCP
-  6  INDEX_FINGER_PIP
-  7  INDEX_FINGER_DIP
-  8  INDEX_FINGER_TIP
-
-  9  MIDDLE_FINGER_MCP
-  10 MIDDLE_FINGER_PIP
-  11 MIDDLE_FINGER_DIP
-  12 MIDDLE_FINGER_TIP
-
-  13 RING_FINGER_MCP
-  14 RING_FINGER_PIP
-  15 RING_FINGER_DIP
-  16 RING_FINGER_TIP
-
-  17 PINKY_MCP
-  18 PINKY_PIP
-  19 PINKY_DIP
-  20 PINKY_TIP
-*/
-
+/* =========================================================
+   MEDIAPIPE LANDMARK NAMES
+========================================================= */
 
 const names = [
-  "Wrist",
 
-  "Thumb CMC",
-  "Thumb MCP",
-  "Thumb IP",
-  "Thumb Tip",
+    "Wrist",
 
-  "Index MCP",
-  "Index PIP",
-  "Index DIP",
-  "Index Tip",
+    "Thumb CMC",
+    "Thumb MCP",
+    "Thumb IP",
+    "Thumb Tip",
 
-  "Middle MCP",
-  "Middle PIP",
-  "Middle DIP",
-  "Middle Tip",
+    "Index MCP",
+    "Index PIP",
+    "Index DIP",
+    "Index Tip",
 
-  "Ring MCP",
-  "Ring PIP",
-  "Ring DIP",
-  "Ring Tip",
+    "Middle MCP",
+    "Middle PIP",
+    "Middle DIP",
+    "Middle Tip",
 
-  "Pinky MCP",
-  "Pinky PIP",
-  "Pinky DIP",
-  "Pinky Tip"
+    "Ring MCP",
+    "Ring PIP",
+    "Ring DIP",
+    "Ring Tip",
+
+    "Pinky MCP",
+    "Pinky PIP",
+    "Pinky DIP",
+    "Pinky Tip"
+
 ];
 
 
-// MediaPipe hand connections.
+
+/* =========================================================
+   MEDIAPIPE HAND CONNECTIONS
+========================================================= */
+
+/*
+    This is the important part.
+
+    These are bones/landmark connections.
+
+    There is deliberately NO:
+        fingertip -> fingertip
+        palm polygon
+        webbing polygon
+
+    Each finger is its own chain.
+*/
+
 const connections = [
-  [0,1],
-  [1,2],
-  [2,3],
-  [3,4],
 
-  [0,5],
-  [5,6],
-  [6,7],
-  [7,8],
+    // Thumb
+    [0,1],
+    [1,2],
+    [2,3],
+    [3,4],
 
-  [5,9],
-  [9,10],
-  [10,11],
-  [11,12],
+    // Index
+    [0,5],
+    [5,6],
+    [6,7],
+    [7,8],
 
-  [9,13],
-  [13,14],
-  [14,15],
-  [15,16],
+    // Middle
+    [5,9],
+    [9,10],
+    [10,11],
+    [11,12],
 
-  [13,17],
-  [17,18],
-  [18,19],
-  [19,20],
+    // Ring
+    [9,13],
+    [13,14],
+    [14,15],
+    [15,16],
 
-  [0,17]
+    // Pinky
+    [13,17],
+    [17,18],
+    [18,19],
+    [19,20],
+
+    // Palm / wrist
+    [0,17]
+
 ];
 
 
-// ------------------------------------------------------------
-// Initial open-palm pose.
-// Coordinates are normalized 0..1.
-// ------------------------------------------------------------
+
+/* =========================================================
+   OPEN PALM
+========================================================= */
 
 const defaultPose = [
-  {x:.50,y:.88,z:0},
 
-  {x:.40,y:.72,z:0},
-  {x:.32,y:.61,z:0},
-  {x:.27,y:.48,z:0},
-  {x:.25,y:.34,z:0},
+    {x:.50, y:.88, z:0}, // 0 wrist
 
-  {x:.40,y:.58,z:0},
-  {x:.37,y:.42,z:0},
-  {x:.36,y:.27,z:0},
-  {x:.37,y:.12,z:0},
+    {x:.40, y:.72, z:0}, // 1
+    {x:.32, y:.62, z:0}, // 2
+    {x:.25, y:.52, z:0}, // 3
+    {x:.17, y:.43, z:0}, // 4
 
-  {x:.50,y:.55,z:0},
-  {x:.50,y:.37,z:0},
-  {x:.50,y:.21,z:0},
-  {x:.50,y:.08,z:0},
+    {x:.40, y:.59, z:0}, // 5
+    {x:.37, y:.43, z:0}, // 6
+    {x:.35, y:.27, z:0}, // 7
+    {x:.34, y:.12, z:0}, // 8
 
-  {x:.60,y:.57,z:0},
-  {x:.64,y:.40,z:0},
-  {x:.65,y:.25,z:0},
-  {x:.66,y:.13,z:0},
+    {x:.50, y:.55, z:0}, // 9
+    {x:.50, y:.37, z:0}, // 10
+    {x:.50, y:.21, z:0}, // 11
+    {x:.50, y:.07, z:0}, // 12
 
-  {x:.69,y:.62,z:0},
-  {x:.75,y:.49,z:0},
-  {x:.78,y:.37,z:0},
-  {x:.79,y:.26,z:0}
+    {x:.60, y:.57, z:0}, // 13
+    {x:.63, y:.40, z:0}, // 14
+    {x:.64, y:.24, z:0}, // 15
+    {x:.65, y:.12, z:0}, // 16
+
+    {x:.69, y:.62, z:0}, // 17
+    {x:.74, y:.49, z:0}, // 18
+    {x:.77, y:.37, z:0}, // 19
+    {x:.79, y:.27, z:0}  // 20
+
 ];
 
 
-let pose = clonePose(defaultPose);
-let originalPose = clonePose(defaultPose);
-let selected = null;
-let dragging = null;
 
-
-// ------------------------------------------------------------
-// Presets
-// ------------------------------------------------------------
+/* =========================================================
+   PRESETS
+========================================================= */
 
 const presets = {
 
-  open: defaultPose,
 
-  fist: [
-    {x:.50,y:.88,z:0},
+    open:
+        defaultPose,
 
-    {x:.39,y:.70,z:0},
-    {x:.34,y:.62,z:0},
-    {x:.40,y:.54,z:0},
-    {x:.49,y:.54,z:0},
 
-    {x:.39,y:.58,z:0},
-    {x:.40,y:.49,z:0},
-    {x:.43,y:.43,z:0},
-    {x:.47,y:.45,z:0},
+    fist: [
 
-    {x:.50,y:.55,z:0},
-    {x:.52,y:.46,z:0},
-    {x:.53,y:.41,z:0},
-    {x:.53,y:.44,z:0},
+        {x:.50,y:.88,z:0},
 
-    {x:.61,y:.57,z:0},
-    {x:.62,y:.47,z:0},
-    {x:.61,y:.42,z:0},
-    {x:.59,y:.45,z:0},
+        {x:.40,y:.72,z:0},
+        {x:.34,y:.64,z:0},
+        {x:.38,y:.57,z:0},
+        {x:.46,y:.56,z:0},
 
-    {x:.70,y:.62,z:0},
-    {x:.69,y:.52,z:0},
-    {x:.66,y:.47,z:0},
-    {x:.63,y:.49,z:0}
-  ],
+        {x:.40,y:.59,z:0},
+        {x:.41,y:.51,z:0},
+        {x:.44,y:.46,z:0},
+        {x:.48,y:.48,z:0},
 
-  point: [
-    {x:.50,y:.88,z:0},
+        {x:.50,y:.55,z:0},
+        {x:.52,y:.47,z:0},
+        {x:.53,y:.43,z:0},
+        {x:.53,y:.46,z:0},
 
-    {x:.39,y:.72,z:0},
-    {x:.32,y:.63,z:0},
-    {x:.38,y:.57,z:0},
-    {x:.47,y:.58,z:0},
+        {x:.60,y:.57,z:0},
+        {x:.62,y:.49,z:0},
+        {x:.61,y:.44,z:0},
+        {x:.58,y:.47,z:0},
 
-    {x:.40,y:.58,z:0},
-    {x:.40,y:.41,z:0},
-    {x:.40,y:.25,z:0},
-    {x:.40,y:.10,z:0},
+        {x:.69,y:.62,z:0},
+        {x:.69,y:.54,z:0},
+        {x:.66,y:.49,z:0},
+        {x:.63,y:.51,z:0}
 
-    {x:.50,y:.55,z:0},
-    {x:.52,y:.46,z:0},
-    {x:.53,y:.40,z:0},
-    {x:.53,y:.43,z:0},
+    ],
 
-    {x:.61,y:.57,z:0},
-    {x:.63,y:.48,z:0},
-    {x:.62,y:.43,z:0},
-    {x:.59,y:.46,z:0},
 
-    {x:.70,y:.62,z:0},
-    {x:.70,y:.53,z:0},
-    {x:.67,y:.48,z:0},
-    {x:.64,y:.50,z:0}
-  ],
+    point: [
 
-  peace: [
-    {x:.50,y:.88,z:0},
+        {x:.50,y:.88,z:0},
 
-    {x:.40,y:.72,z:0},
-    {x:.33,y:.62,z:0},
-    {x:.39,y:.56,z:0},
-    {x:.48,y:.57,z:0},
+        {x:.40,y:.72,z:0},
+        {x:.33,y:.63,z:0},
+        {x:.38,y:.57,z:0},
+        {x:.47,y:.58,z:0},
 
-    {x:.41,y:.58,z:0},
-    {x:.38,y:.43,z:0},
-    {x:.36,y:.29,z:0},
-    {x:.35,y:.15,z:0},
+        {x:.40,y:.59,z:0},
+        {x:.40,y:.43,z:0},
+        {x:.40,y:.27,z:0},
+        {x:.40,y:.10,z:0},
 
-    {x:.50,y:.55,z:0},
-    {x:.50,y:.40,z:0},
-    {x:.51,y:.26,z:0},
-    {x:.52,y:.14,z:0},
+        {x:.50,y:.55,z:0},
+        {x:.52,y:.47,z:0},
+        {x:.53,y:.42,z:0},
+        {x:.53,y:.46,z:0},
 
-    {x:.61,y:.57,z:0},
-    {x:.62,y:.47,z:0},
-    {x:.60,y:.43,z:0},
-    {x:.58,y:.46,z:0},
+        {x:.60,y:.57,z:0},
+        {x:.62,y:.49,z:0},
+        {x:.61,y:.44,z:0},
+        {x:.58,y:.47,z:0},
 
-    {x:.70,y:.62,z:0},
-    {x:.69,y:.53,z:0},
-    {x:.66,y:.48,z:0},
-    {x:.63,y:.50,z:0}
-  ],
+        {x:.69,y:.62,z:0},
+        {x:.69,y:.54,z:0},
+        {x:.66,y:.49,z:0},
+        {x:.63,y:.51,z:0}
 
-  pinch: [
-    {x:.50,y:.88,z:0},
+    ],
 
-    {x:.40,y:.72,z:0},
-    {x:.34,y:.63,z:0},
-    {x:.39,y:.53,z:0},
-    {x:.48,y:.48,z:0},
 
-    {x:.40,y:.58,z:0},
-    {x:.42,y:.48,z:0},
-    {x:.46,y:.42,z:0},
-    {x:.50,y:.40,z:0},
+    peace: [
 
-    {x:.50,y:.55,z:0},
-    {x:.52,y:.47,z:0},
-    {x:.53,y:.42,z:0},
-    {x:.54,y:.43,z:0},
+        {x:.50,y:.88,z:0},
 
-    {x:.61,y:.57,z:0},
-    {x:.63,y:.48,z:0},
-    {x:.62,y:.43,z:0},
-    {x:.59,y:.46,z:0},
+        {x:.40,y:.72,z:0},
+        {x:.33,y:.63,z:0},
+        {x:.38,y:.56,z:0},
+        {x:.47,y:.57,z:0},
 
-    {x:.70,y:.62,z:0},
-    {x:.70,y:.53,z:0},
-    {x:.67,y:.48,z:0},
-    {x:.64,y:.50,z:0}
-  ],
+        {x:.40,y:.59,z:0},
+        {x:.38,y:.43,z:0},
+        {x:.36,y:.27,z:0},
+        {x:.35,y:.12,z:0},
 
-  thumb: [
-    {x:.50,y:.88,z:0},
+        {x:.50,y:.55,z:0},
+        {x:.50,y:.39,z:0},
+        {x:.51,y:.25,z:0},
+        {x:.52,y:.12,z:0},
 
-    {x:.40,y:.72,z:0},
-    {x:.32,y:.63,z:0},
-    {x:.28,y:.51,z:0},
-    {x:.22,y:.41,z:0},
+        {x:.60,y:.57,z:0},
+        {x:.62,y:.49,z:0},
+        {x:.61,y:.44,z:0},
+        {x:.58,y:.47,z:0},
 
-    {x:.40,y:.58,z:0},
-    {x:.40,y:.49,z:0},
-    {x:.43,y:.44,z:0},
-    {x:.47,y:.46,z:0},
+        {x:.69,y:.62,z:0},
+        {x:.69,y:.54,z:0},
+        {x:.66,y:.49,z:0},
+        {x:.63,y:.51,z:0}
 
-    {x:.50,y:.55,z:0},
-    {x:.52,y:.46,z:0},
-    {x:.53,y:.41,z:0},
-    {x:.53,y:.44,z:0},
+    ],
 
-    {x:.61,y:.57,z:0},
-    {x:.62,y:.47,z:0},
-    {x:.61,y:.42,z:0},
-    {x:.59,y:.45,z:0},
 
-    {x:.70,y:.62,z:0},
-    {x:.69,y:.52,z:0},
-    {x:.66,y:.47,z:0},
-    {x:.63,y:.49,z:0}
-  ]
+    pinch: [
+
+        {x:.50,y:.88,z:0},
+
+        {x:.40,y:.72,z:0},
+        {x:.34,y:.63,z:0},
+        {x:.39,y:.54,z:0},
+        {x:.48,y:.47,z:0},
+
+        {x:.40,y:.59,z:0},
+        {x:.42,y:.49,z:0},
+        {x:.46,y:.43,z:0},
+        {x:.51,y:.41,z:0},
+
+        {x:.50,y:.55,z:0},
+        {x:.52,y:.47,z:0},
+        {x:.53,y:.42,z:0},
+        {x:.54,y:.45,z:0},
+
+        {x:.60,y:.57,z:0},
+        {x:.62,y:.49,z:0},
+        {x:.61,y:.44,z:0},
+        {x:.58,y:.47,z:0},
+
+        {x:.69,y:.62,z:0},
+        {x:.69,y:.54,z:0},
+        {x:.66,y:.49,z:0},
+        {x:.63,y:.51,z:0}
+
+    ],
+
+
+    thumb: [
+
+        {x:.50,y:.88,z:0},
+
+        {x:.40,y:.72,z:0},
+        {x:.33,y:.63,z:0},
+        {x:.27,y:.53,z:0},
+        {x:.18,y:.45,z:0},
+
+        {x:.40,y:.59,z:0},
+        {x:.41,y:.50,z:0},
+        {x:.44,y:.46,z:0},
+        {x:.48,y:.48,z:0},
+
+        {x:.50,y:.55,z:0},
+        {x:.52,y:.47,z:0},
+        {x:.53,y:.42,z:0},
+        {x:.53,y:.46,z:0},
+
+        {x:.60,y:.57,z:0},
+        {x:.62,y:.49,z:0},
+        {x:.61,y:.44,z:0},
+        {x:.58,y:.47,z:0},
+
+        {x:.69,y:.62,z:0},
+        {x:.69,y:.54,z:0},
+        {x:.66,y:.49,z:0},
+        {x:.63,y:.51,z:0}
+
+    ]
+
 };
 
 
-// ------------------------------------------------------------
-// Helpers
-// ------------------------------------------------------------
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let pose =
+    clonePose(defaultPose);
+
+let originalPose =
+    clonePose(defaultPose);
+
+let selected =
+    null;
+
+let dragging =
+    null;
+
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const svg =
+    document.getElementById("handSvg");
+
+const stage =
+    document.getElementById("stage");
+
+const bones =
+    document.getElementById("bones");
+
+const joints =
+    document.getElementById("joints");
+
+const backgroundLayer =
+    document.getElementById("backgroundLayer");
+
+
+
+/* =========================================================
+   UTILITIES
+========================================================= */
 
 function clonePose(p) {
-  return p.map(v => ({...v}));
+
+    return p.map(point => ({
+        x: point.x,
+        y: point.y,
+        z: point.z
+    }));
+
 }
 
 
-function clamp(v, min, max) {
-  return Math.max(min, Math.min(max, v));
+function clamp(value, min, max) {
+
+    return Math.max(
+        min,
+        Math.min(max, value)
+    );
+
 }
 
 
-function svgPoint(p) {
-  return {
-    x: p.x * 1000,
-    y: p.y * 1000
-  };
+function svgCoords(point) {
+
+    return {
+
+        x: point.x * 1000,
+
+        y: point.y * 1000
+
+    };
+
 }
 
 
-// ------------------------------------------------------------
-// Rendering
-// ------------------------------------------------------------
+function color(id) {
 
-const svg = document.getElementById("handSvg");
-const handShape = document.getElementById("handShape");
-const bones = document.getElementById("bones");
-const joints = document.getElementById("joints");
+    return document
+        .getElementById(id)
+        .value;
 
+}
+
+
+
+/* =========================================================
+   RENDER
+========================================================= */
 
 function render() {
 
-  renderHandShape();
-  renderBones();
-  renderJoints();
-  renderLandmarkList();
-  updateSelectedInfo();
+    renderBackground();
+
+    renderBones();
+
+    renderJoints();
+
+    renderLandmarkList();
+
+    updateSelectedInfo();
+
 }
 
+
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+function renderBackground() {
+
+    const bg =
+        document.getElementById(
+            "backgroundColor"
+        ).value;
+
+
+    backgroundLayer.innerHTML = "";
+
+
+    /*
+        Transparent
+    */
+
+    if (currentBackground === "transparent") {
+
+        stage.classList.remove("solid");
+
+        stage.classList.add("transparent");
+
+        return;
+
+    }
+
+
+    /*
+        Solid background
+    */
+
+    stage.classList.remove("transparent");
+
+    stage.classList.add("solid");
+
+    stage.style.setProperty(
+        "--stage-background",
+        bg
+    );
+
+
+    const rect =
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "rect"
+        );
+
+    rect.setAttribute(
+        "x",
+        "0"
+    );
+
+    rect.setAttribute(
+        "y",
+        "0"
+    );
+
+    rect.setAttribute(
+        "width",
+        "1000"
+    );
+
+    rect.setAttribute(
+        "height",
+        "1000"
+    );
+
+    rect.setAttribute(
+        "fill",
+        bg
+    );
+
+    backgroundLayer.appendChild(rect);
+
+}
+
+
+
+/* =========================================================
+   BONE RENDERING
+========================================================= */
 
 function renderBones() {
 
-  bones.innerHTML = "";
+    bones.innerHTML = "";
 
-  for (const [a,b] of connections) {
 
-    const p1 = svgPoint(pose[a]);
-    const p2 = svgPoint(pose[b]);
-
-    const line = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "line"
+    bones.setAttribute(
+        "stroke",
+        color("boneColor")
     );
 
-    line.setAttribute("x1", p1.x);
-    line.setAttribute("y1", p1.y);
-    line.setAttribute("x2", p2.x);
-    line.setAttribute("y2", p2.y);
 
-    bones.appendChild(line);
-  }
+    for (
+        const [a,b]
+        of connections
+    ) {
+
+        const p1 =
+            svgCoords(pose[a]);
+
+        const p2 =
+            svgCoords(pose[b]);
+
+
+        const line =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "line"
+            );
+
+
+        line.setAttribute(
+            "x1",
+            p1.x
+        );
+
+        line.setAttribute(
+            "y1",
+            p1.y
+        );
+
+        line.setAttribute(
+            "x2",
+            p2.x
+        );
+
+        line.setAttribute(
+            "y2",
+            p2.y
+        );
+
+
+        bones.appendChild(line);
+
+    }
+
 }
 
+
+
+/* =========================================================
+   JOINT RENDERING
+========================================================= */
 
 function renderJoints() {
 
-  joints.innerHTML = "";
+    joints.innerHTML = "";
 
-  pose.forEach((p,i) => {
 
-    const {x,y} = svgPoint(p);
+    const showLandmarks =
+        document.getElementById(
+            "showLandmarks"
+        ).checked;
 
-    const group = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "g"
+
+    const showNumbers =
+        document.getElementById(
+            "showNumbers"
+        ).checked;
+
+
+    if (!showLandmarks) {
+
+        return;
+
+    }
+
+
+    pose.forEach(
+        (point, index) => {
+
+            const group =
+                document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "g"
+                );
+
+
+            const p =
+                svgCoords(point);
+
+
+            const circle =
+                document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "circle"
+                );
+
+
+            circle.setAttribute(
+                "cx",
+                p.x
+            );
+
+            circle.setAttribute(
+                "cy",
+                p.y
+            );
+
+            circle.setAttribute(
+                "r",
+                index === selected
+                    ? 19
+                    : 15
+            );
+
+
+            circle.setAttribute(
+                "fill",
+                index === selected
+                    ? color("selectedColor")
+                    : color("jointColor")
+            );
+
+
+            circle.setAttribute(
+                "stroke",
+                "#ffffff"
+            );
+
+            circle.setAttribute(
+                "stroke-width",
+                "5"
+            );
+
+
+            group.appendChild(circle);
+
+
+            /*
+                Landmark number.
+            */
+
+            if (showNumbers) {
+
+                const text =
+                    document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "text"
+                    );
+
+
+                text.setAttribute(
+                    "x",
+                    p.x
+                );
+
+                text.setAttribute(
+                    "y",
+                    p.y + 4
+                );
+
+                text.setAttribute(
+                    "text-anchor",
+                    "middle"
+                );
+
+                text.setAttribute(
+                    "font-size",
+                    "11"
+                );
+
+                text.setAttribute(
+                    "font-weight",
+                    "700"
+                );
+
+                text.setAttribute(
+                    "fill",
+                    "#ffffff"
+                );
+
+                text.setAttribute(
+                    "pointer-events",
+                    "none"
+                );
+
+                text.textContent =
+                    index;
+
+
+                group.appendChild(text);
+
+            }
+
+
+            group.style.cursor =
+                "grab";
+
+
+            /*
+                Start dragging.
+            */
+
+            group.addEventListener(
+                "pointerdown",
+                event => {
+
+                    event.preventDefault();
+
+                    selected =
+                        index;
+
+                    dragging =
+                        index;
+
+                    group.setPointerCapture?.(
+                        event.pointerId
+                    );
+
+                    render();
+
+                }
+            );
+
+
+            joints.appendChild(group);
+
+        }
     );
 
-    const outer = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "circle"
-    );
-
-    outer.setAttribute("cx",x);
-    outer.setAttribute("cy",y);
-    outer.setAttribute("r", i === selected ? 19 : 15);
-    outer.setAttribute("fill",
-      i === selected ? "#6c63ff" : getColor("jointColor")
-    );
-    outer.setAttribute("stroke","#ffffff");
-    outer.setAttribute("stroke-width","5");
-
-    group.appendChild(outer);
-
-    const number = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "text"
-    );
-
-    number.setAttribute("x",x);
-    number.setAttribute("y",y+4);
-    number.setAttribute("text-anchor","middle");
-    number.setAttribute("font-size","11");
-    number.setAttribute("font-weight","700");
-    number.setAttribute("fill","#ffffff");
-    number.setAttribute("pointer-events","none");
-    number.textContent = i;
-
-    group.appendChild(number);
-
-    group.style.cursor = "grab";
-
-    group.addEventListener("pointerdown", e => {
-      e.preventDefault();
-      selected = i;
-      dragging = i;
-      group.setPointerCapture?.(e.pointerId);
-      render();
-    });
-
-    joints.appendChild(group);
-  });
 }
 
 
-function renderHandShape() {
 
-  /*
-    We create a soft polygon-like silhouette around the
-    landmark structure.
-
-    This isn't intended to be anatomically perfect.
-  */
-
-  const wrist = pose[0];
-
-  const tips = [
-    pose[4],
-    pose[8],
-    pose[12],
-    pose[16],
-    pose[20]
-  ];
-
-  const palm = [
-    pose[1],
-    pose[5],
-    pose[9],
-    pose[13],
-    pose[17]
-  ];
-
-  const points = [
-    pose[0],
-    pose[1],
-    pose[4],
-    pose[8],
-    pose[12],
-    pose[16],
-    pose[20],
-    pose[17]
-  ];
-
-  const d = points.map((p,i) => {
-
-    const q = svgPoint(p);
-
-    return (i === 0 ? "M" : "L") +
-      ` ${q.x} ${q.y}`;
-
-  }).join(" ");
-
-  handShape.setAttribute("d", d + " Z");
-}
-
-
-// ------------------------------------------------------------
-// Landmark list
-// ------------------------------------------------------------
+/* =========================================================
+   LANDMARK LIST
+========================================================= */
 
 function renderLandmarkList() {
 
-  const list = document.getElementById("landmarkList");
+    const list =
+        document.getElementById(
+            "landmarkList"
+        );
 
-  list.innerHTML = "";
 
-  pose.forEach((p,i) => {
+    list.innerHTML = "";
 
-    const row = document.createElement("div");
-    row.className = "landmark-row";
 
-    row.innerHTML = `
-      <div class="dot"></div>
-      <div>
-        <div class="landmark-name">
-          <strong>${i}</strong> ${names[i]}
-        </div>
-        <div class="landmark-index">
-          x ${p.x.toFixed(3)}
-          &nbsp;&nbsp;
-          y ${p.y.toFixed(3)}
-        </div>
-      </div>
-    `;
+    pose.forEach(
+        (point,index) => {
 
-    row.addEventListener("click", () => {
-      selected = i;
-      render();
-    });
+            const row =
+                document.createElement(
+                    "div"
+                );
 
-    list.appendChild(row);
-  });
+
+            row.className =
+                "landmark-row";
+
+
+            if (index === selected) {
+
+                row.classList.add(
+                    "selected"
+                );
+
+            }
+
+
+            row.innerHTML = `
+
+                <div class="landmark-dot"></div>
+
+                <div>
+
+                    <div class="landmark-name">
+                        ${index}
+                        ${names[index]}
+                    </div>
+
+                    <div class="landmark-coords">
+                        x ${point.x.toFixed(3)}
+                        &nbsp;&nbsp;
+                        y ${point.y.toFixed(3)}
+                    </div>
+
+                </div>
+
+            `;
+
+
+            row.addEventListener(
+                "click",
+                () => {
+
+                    selected =
+                        index;
+
+                    render();
+
+                }
+            );
+
+
+            list.appendChild(row);
+
+        }
+    );
+
 }
 
+
+
+/* =========================================================
+   SELECTED POINT
+========================================================= */
 
 function updateSelectedInfo() {
 
-  const info = document.getElementById("selectedInfo");
+    const info =
+        document.getElementById(
+            "selectedInfo"
+        );
 
-  if (selected === null) {
-    info.textContent = "Click a landmark.";
-    return;
-  }
 
-  const p = pose[selected];
+    if (selected === null) {
 
-  info.innerHTML = `
-    <strong>${selected}: ${names[selected]}</strong><br><br>
-    x = ${p.x.toFixed(4)}<br>
-    y = ${p.y.toFixed(4)}<br>
-    z = ${p.z.toFixed(4)}
-  `;
+        info.innerHTML =
+            "Click a landmark.";
+
+        return;
+
+    }
+
+
+    const p =
+        pose[selected];
+
+
+    info.innerHTML = `
+
+        <strong>
+            ${selected} — ${names[selected]}
+        </strong>
+
+        <br><br>
+
+        x =
+        ${p.x.toFixed(4)}
+
+        <br>
+
+        y =
+        ${p.y.toFixed(4)}
+
+        <br>
+
+        z =
+        ${p.z.toFixed(4)}
+
+    `;
+
 }
 
 
-// ------------------------------------------------------------
-// Dragging
-// ------------------------------------------------------------
 
-svg.addEventListener("pointermove", e => {
+/* =========================================================
+   DRAGGING
+========================================================= */
 
-  if (dragging === null) return;
+svg.addEventListener(
+    "pointermove",
+    event => {
 
-  const rect = svg.getBoundingClientRect();
+        if (dragging === null) {
 
-  const x = clamp(
-    (e.clientX - rect.left) / rect.width,
-    0,
-    1
-  );
+            return;
 
-  const y = clamp(
-    (e.clientY - rect.top) / rect.height,
-    0,
-    1
-  );
-
-  pose[dragging].x = x;
-  pose[dragging].y = y;
-
-  render();
-});
+        }
 
 
-window.addEventListener("pointerup", () => {
-  dragging = null;
-});
+        const rect =
+            svg.getBoundingClientRect();
 
 
-// ------------------------------------------------------------
-// Presets
-// ------------------------------------------------------------
-
-document.getElementById("preset").addEventListener("change", e => {
-
-  const key = e.target.value;
-
-  if (!key || !presets[key]) return;
-
-  pose = clonePose(presets[key]);
-  originalPose = clonePose(pose);
-
-  document.getElementById("poseName").value = key;
-
-  selected = null;
-
-  render();
-});
+        const x =
+            clamp(
+                (event.clientX - rect.left)
+                / rect.width,
+                0,
+                1
+            );
 
 
-// ------------------------------------------------------------
-// Reset
-// ------------------------------------------------------------
+        const y =
+            clamp(
+                (event.clientY - rect.top)
+                / rect.height,
+                0,
+                1
+            );
+
+
+        pose[dragging].x =
+            x;
+
+        pose[dragging].y =
+            y;
+
+
+        render();
+
+    }
+);
+
+
+window.addEventListener(
+    "pointerup",
+    () => {
+
+        dragging =
+            null;
+
+    }
+);
+
+
+
+/* =========================================================
+   PRESET SELECTION
+========================================================= */
+
+document
+    .getElementById("preset")
+    .addEventListener(
+        "change",
+        event => {
+
+            const key =
+                event.target.value;
+
+
+            if (
+                !key ||
+                !presets[key]
+            ) {
+
+                return;
+
+            }
+
+
+            pose =
+                clonePose(
+                    presets[key]
+                );
+
+
+            originalPose =
+                clonePose(pose);
+
+
+            document
+                .getElementById(
+                    "poseName"
+                )
+                .value =
+                key;
+
+
+            selected =
+                null;
+
+
+            render();
+
+        }
+    );
+
+
+
+/* =========================================================
+   RESET
+========================================================= */
 
 function resetPose() {
 
-  pose = clonePose(originalPose);
-  selected = null;
+    pose =
+        clonePose(
+            originalPose
+        );
 
-  render();
+
+    selected =
+        null;
+
+
+    render();
+
 }
 
 
-// ------------------------------------------------------------
-// Flip
-// ------------------------------------------------------------
+
+/* =========================================================
+   FLIP
+========================================================= */
 
 function flipPose() {
 
-  pose.forEach(p => {
-    p.x = 1 - p.x;
-  });
+    pose.forEach(
+        point => {
 
-  render();
+            point.x =
+                1 - point.x;
+
+        }
+    );
+
+
+    render();
+
 }
 
 
-// ------------------------------------------------------------
-// Colors
-// ------------------------------------------------------------
 
-function getColor(id) {
-  return document.getElementById(id).value;
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+let currentBackground =
+    "solid";
+
+
+function setBackground(type) {
+
+    currentBackground =
+        type;
+
+
+    const input =
+        document.getElementById(
+            "backgroundColor"
+        );
+
+
+    if (type === "white") {
+
+        input.value =
+            "#ffffff";
+
+    }
+
+
+    if (type === "black") {
+
+        input.value =
+            "#000000";
+
+    }
+
+
+    render();
+
 }
 
 
-document.getElementById("handColor").addEventListener("input", updateColors);
-document.getElementById("outlineColor").addEventListener("input", updateColors);
-document.getElementById("boneColor").addEventListener("input", updateColors);
-document.getElementById("jointColor").addEventListener("input", updateColors);
+
+/*
+    Custom color picker.
+*/
+
+document
+    .getElementById(
+        "backgroundColor"
+    )
+    .addEventListener(
+        "input",
+        () => {
+
+            currentBackground =
+                "solid";
+
+            render();
+
+        }
+    );
 
 
-function updateColors() {
 
-  handShape.setAttribute(
-    "fill",
-    getColor("handColor")
-  );
+/* =========================================================
+   STYLE CONTROLS
+========================================================= */
 
-  handShape.setAttribute(
-    "stroke",
-    getColor("outlineColor")
-  );
+[
+    "boneColor",
+    "jointColor",
+    "selectedColor",
+    "showLandmarks",
+    "showNumbers"
+]
+.forEach(
+    id => {
 
-  bones.setAttribute(
-    "stroke",
-    getColor("boneColor")
-  );
+        document
+            .getElementById(id)
+            .addEventListener(
+                "input",
+                render
+            );
 
-  renderJoints();
-}
+    }
+);
 
 
-// ------------------------------------------------------------
-// SVG export
-// ------------------------------------------------------------
+
+/* =========================================================
+   EXPORT SVG
+========================================================= */
 
 function makeExportSVG() {
 
-  const clone = svg.cloneNode(true);
+    /*
+        Clone current SVG.
+    */
 
-  clone.setAttribute(
-    "xmlns",
-    "http://www.w3.org/2000/svg"
-  );
+    const clone =
+        svg.cloneNode(true);
 
-  clone.setAttribute(
-    "viewBox",
-    "0 0 1000 1000"
-  );
 
-  // Remove editor interaction styling.
-  clone.querySelectorAll("g").forEach(g => {
-    g.removeAttribute("style");
-  });
+    /*
+        Remove editor-only landmark
+        numbers/dots if requested.
 
-  // Hide numbered landmark labels.
-  clone.querySelectorAll("text").forEach(t => {
-    t.remove();
-  });
+        For clean exported artwork,
+        landmark dots are not necessary.
+    */
 
-  // Hide joints for the clean artwork.
-  clone.querySelector("#joints")?.remove();
+    const showLandmarks =
+        document
+            .getElementById(
+                "showLandmarks"
+            )
+            .checked;
 
-  return `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    new XMLSerializer().serializeToString(clone);
+
+    if (!showLandmarks) {
+
+        clone
+            .querySelector(
+                "#joints"
+            )
+            ?.remove();
+
+    }
+
+
+    /*
+        Add XML namespace.
+    */
+
+    clone.setAttribute(
+        "xmlns",
+        "http://www.w3.org/2000/svg"
+    );
+
+
+    clone.setAttribute(
+        "viewBox",
+        "0 0 1000 1000"
+    );
+
+
+    /*
+        Return complete SVG.
+    */
+
+    return (
+
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        +
+        new XMLSerializer()
+            .serializeToString(clone)
+
+    );
+
 }
 
 
-function download(filename, content, type) {
 
-  const blob = new Blob(
-    [content],
-    {type}
-  );
+/* =========================================================
+   DOWNLOAD HELPER
+========================================================= */
 
-  const url = URL.createObjectURL(blob);
+function download(
+    filename,
+    content,
+    type
+) {
 
-  const a = document.createElement("a");
+    const blob =
+        new Blob(
+            [content],
+            {type:type}
+        );
 
-  a.href = url;
-  a.download = filename;
 
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
+    const url =
+        URL.createObjectURL(
+            blob
+        );
 
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    const a =
+        document.createElement(
+            "a"
+        );
+
+
+    a.href =
+        url;
+
+    a.download =
+        filename;
+
+
+    document.body.appendChild(
+        a
+    );
+
+
+    a.click();
+
+
+    a.remove();
+
+
+    setTimeout(
+        () => {
+
+            URL.revokeObjectURL(
+                url
+            );
+
+        },
+        1000
+    );
+
 }
 
+
+
+/* =========================================================
+   EXPORT SVG
+========================================================= */
 
 function exportSVG() {
 
-  const name =
-    document.getElementById("poseName").value.trim()
-    || "hand-pose";
+    const name =
+        document
+            .getElementById(
+                "poseName"
+            )
+            .value
+            .trim()
+            ||
+            "hand-pose";
 
-  download(
-    name + ".svg",
-    makeExportSVG(),
-    "image/svg+xml"
-  );
 
-  showStatus("SVG exported!");
+    download(
+
+        name + ".svg",
+
+        makeExportSVG(),
+
+        "image/svg+xml"
+
+    );
+
+
+    showStatus(
+        "SVG exported!"
+    );
+
 }
 
 
-// ------------------------------------------------------------
-// PNG export
-// ------------------------------------------------------------
+
+/* =========================================================
+   EXPORT PNG
+========================================================= */
 
 function exportPNG() {
 
-  const name =
-    document.getElementById("poseName").value.trim()
-    || "hand-pose";
+    const name =
+        document
+            .getElementById(
+                "poseName"
+            )
+            .value
+            .trim()
+            ||
+            "hand-pose";
 
-  const svgString = makeExportSVG();
 
-  const blob = new Blob(
-    [svgString],
-    {type:"image/svg+xml;charset=utf-8"}
-  );
+    const svgString =
+        makeExportSVG();
 
-  const url = URL.createObjectURL(blob);
 
-  const img = new Image();
+    const blob =
+        new Blob(
+            [svgString],
+            {
+                type:
+                    "image/svg+xml;charset=utf-8"
+            }
+        );
 
-  img.onload = () => {
 
-    const canvas = document.createElement("canvas");
+    const url =
+        URL.createObjectURL(
+            blob
+        );
 
-    canvas.width = 2000;
-    canvas.height = 2000;
 
-    const ctx = canvas.getContext("2d");
+    const img =
+        new Image();
 
-    ctx.clearRect(
-      0,0,
-      canvas.width,
-      canvas.height
-    );
 
-    ctx.drawImage(
-      img,
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
+    img.onload =
+        () => {
 
-    canvas.toBlob(blob => {
+            const canvas =
+                document.createElement(
+                    "canvas"
+                );
 
-      const pngUrl =
-        URL.createObjectURL(blob);
 
-      const a =
-        document.createElement("a");
+            /*
+                High resolution export.
+            */
 
-      a.href = pngUrl;
-      a.download = name + ".png";
+            canvas.width =
+                2000;
 
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+            canvas.height =
+                2000;
 
-      URL.revokeObjectURL(pngUrl);
 
-      showStatus("PNG exported!");
+            const ctx =
+                canvas.getContext(
+                    "2d"
+                );
 
-    }, "image/png");
 
-    URL.revokeObjectURL(url);
-  };
+            /*
+                Transparent canvas by default.
+            */
 
-  img.src = url;
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            ctx.drawImage(
+
+                img,
+
+                0,
+                0,
+
+                canvas.width,
+                canvas.height
+
+            );
+
+
+            canvas.toBlob(
+                pngBlob => {
+
+                    const pngUrl =
+                        URL.createObjectURL(
+                            pngBlob
+                        );
+
+
+                    const a =
+                        document.createElement(
+                            "a"
+                        );
+
+
+                    a.href =
+                        pngUrl;
+
+                    a.download =
+                        name + ".png";
+
+
+                    document.body.appendChild(
+                        a
+                    );
+
+
+                    a.click();
+
+
+                    a.remove();
+
+
+                    URL.revokeObjectURL(
+                        pngUrl
+                    );
+
+
+                    showStatus(
+                        "PNG exported!"
+                    );
+
+                },
+
+                "image/png"
+
+            );
+
+
+            URL.revokeObjectURL(
+                url
+            );
+
+        };
+
+
+    img.src =
+        url;
+
 }
 
 
-// ------------------------------------------------------------
-// JSON export
-// ------------------------------------------------------------
+
+/* =========================================================
+   MEDIAPIPE JSON
+========================================================= */
 
 function getJSON() {
 
-  return {
-    name:
-      document.getElementById("poseName").value
-      || "hand-pose",
+    return {
 
-    format: "mediapipe-hand-landmarks-2d",
+        name:
+            document
+                .getElementById(
+                    "poseName"
+                )
+                .value
+                ||
+                "hand-pose",
 
-    landmarks: pose.map((p,i) => ({
-      index: i,
-      name: names[i],
-      x: Number(p.x.toFixed(6)),
-      y: Number(p.y.toFixed(6)),
-      z: 0
-    }))
-  };
+
+        format:
+            "mediapipe-hand-landmarks-2d",
+
+
+        landmarks:
+
+            pose.map(
+                (point,index) => ({
+
+                    index:
+                        index,
+
+                    name:
+                        names[index],
+
+                    x:
+                        Number(
+                            point.x
+                                .toFixed(6)
+                        ),
+
+                    y:
+                        Number(
+                            point.y
+                                .toFixed(6)
+                        ),
+
+                    z:
+                        0
+
+                })
+            )
+
+    };
+
 }
 
+
+
+/* =========================================================
+   EXPORT JSON
+========================================================= */
 
 function exportJSON() {
 
-  const name =
-    document.getElementById("poseName").value.trim()
-    || "hand-pose";
+    const name =
+        document
+            .getElementById(
+                "poseName"
+            )
+            .value
+            .trim()
+            ||
+            "hand-pose";
 
-  const json =
-    JSON.stringify(getJSON(), null, 2);
 
-  download(
-    name + ".json",
-    json,
-    "application/json"
-  );
+    const json =
+        JSON.stringify(
+            getJSON(),
+            null,
+            2
+        );
 
-  showStatus("JSON exported!");
+
+    download(
+
+        name + ".json",
+
+        json,
+
+        "application/json"
+
+    );
+
+
+    showStatus(
+        "JSON exported!"
+    );
+
 }
 
+
+
+/* =========================================================
+   COPY JSON
+========================================================= */
 
 async function copyJSON() {
 
-  const json =
-    JSON.stringify(getJSON(), null, 2);
+    const json =
+        JSON.stringify(
+            getJSON(),
+            null,
+            2
+        );
 
-  try {
 
-    await navigator.clipboard.writeText(json);
+    try {
 
-    showStatus("JSON copied to clipboard!");
+        await navigator
+            .clipboard
+            .writeText(
+                json
+            );
 
-  } catch {
 
-    showStatus(
-      "Clipboard unavailable — use Export JSON."
-    );
-  }
+        showStatus(
+            "JSON copied!"
+        );
+
+    }
+
+    catch {
+
+        showStatus(
+            "Clipboard unavailable."
+        );
+
+    }
+
 }
 
 
-// ------------------------------------------------------------
-// Local saved poses
-// ------------------------------------------------------------
+
+/* =========================================================
+   LOCAL STORAGE
+========================================================= */
 
 function getSaved() {
 
-  try {
-    return JSON.parse(
-      localStorage.getItem("mediapipeHandPoses")
-      || "{}"
-    );
-  } catch {
-    return {};
-  }
+    try {
+
+        return JSON.parse(
+
+            localStorage.getItem(
+                "mediapipeHandPoses"
+            )
+            ||
+            "{}"
+
+        );
+
+    }
+
+    catch {
+
+        return {};
+
+    }
+
 }
 
+
+
+/* =========================================================
+   SAVE POSE
+========================================================= */
 
 function savePose() {
 
-  const name =
-    document.getElementById("poseName").value.trim()
-    || "hand-pose";
+    const name =
+        document
+            .getElementById(
+                "poseName"
+            )
+            .value
+            .trim()
+            ||
+            "hand-pose";
 
-  const saved = getSaved();
 
-  saved[name] = {
-    pose: clonePose(pose),
-    style: {
-      hand:
-        getColor("handColor"),
+    const saved =
+        getSaved();
 
-      outline:
-        getColor("outlineColor"),
 
-      bone:
-        getColor("boneColor"),
+    saved[name] = {
 
-      joint:
-        getColor("jointColor")
-    }
-  };
+        pose:
+            clonePose(
+                pose
+            ),
 
-  localStorage.setItem(
-    "mediapipeHandPoses",
-    JSON.stringify(saved)
-  );
+        style: {
 
-  refreshSavedList();
+            bone:
+                color(
+                    "boneColor"
+                ),
 
-  showStatus(
-    `"${name}" saved in this browser.`
-  );
+            joint:
+                color(
+                    "jointColor"
+                ),
+
+            selected:
+                color(
+                    "selectedColor"
+                ),
+
+            background:
+                color(
+                    "backgroundColor"
+                ),
+
+            backgroundMode:
+                currentBackground
+
+        }
+
+    };
+
+
+    localStorage.setItem(
+
+        "mediapipeHandPoses",
+
+        JSON.stringify(
+            saved
+        )
+
+    );
+
+
+    refreshSavedList();
+
+
+    showStatus(
+        `"${name}" saved.`
+    );
+
 }
 
+
+
+/* =========================================================
+   REFRESH SAVED LIST
+========================================================= */
 
 function refreshSavedList() {
 
-  const select =
-    document.getElementById("savedPoses");
+    const select =
+        document
+            .getElementById(
+                "savedPoses"
+            );
 
-  select.innerHTML =
-    '<option value="">Saved poses...</option>';
 
-  const saved = getSaved();
+    select.innerHTML =
+        `
+        <option value="">
+            Saved poses...
+        </option>
+        `;
 
-  Object.keys(saved).sort().forEach(name => {
 
-    const option =
-      document.createElement("option");
+    const saved =
+        getSaved();
 
-    option.value = name;
-    option.textContent = name;
 
-    select.appendChild(option);
-  });
+    Object.keys(saved)
+        .sort()
+        .forEach(
+            name => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    name;
+
+                option.textContent =
+                    name;
+
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
 }
 
 
-document.getElementById("savedPoses")
-  .addEventListener("change", e => {
 
-    const name = e.target.value;
+/* =========================================================
+   LOAD SAVED POSE
+========================================================= */
 
-    if (!name) return;
+document
+    .getElementById(
+        "savedPoses"
+    )
+    .addEventListener(
+        "change",
+        event => {
 
-    const saved = getSaved()[name];
+            const name =
+                event.target.value;
 
-    if (!saved) return;
 
-    pose = clonePose(saved.pose);
+            if (!name) {
 
-    document.getElementById("poseName")
-      .value = name;
+                return;
 
-    if (saved.style) {
+            }
 
-      document.getElementById("handColor")
-        .value = saved.style.hand;
 
-      document.getElementById("outlineColor")
-        .value = saved.style.outline;
+            const saved =
+                getSaved()[name];
 
-      document.getElementById("boneColor")
-        .value = saved.style.bone;
 
-      document.getElementById("jointColor")
-        .value = saved.style.joint;
-    }
+            if (!saved) {
 
-    selected = null;
+                return;
 
-    updateColors();
-    render();
-  });
+            }
 
+
+            pose =
+                clonePose(
+                    saved.pose
+                );
+
+
+            originalPose =
+                clonePose(
+                    saved.pose
+                );
+
+
+            document
+                .getElementById(
+                    "poseName"
+                )
+                .value =
+                name;
+
+
+            if (saved.style) {
+
+                document
+                    .getElementById(
+                        "boneColor"
+                    )
+                    .value =
+                    saved.style.bone;
+
+
+                document
+                    .getElementById(
+                        "jointColor"
+                    )
+                    .value =
+                    saved.style.joint;
+
+
+                document
+                    .getElementById(
+                        "selectedColor"
+                    )
+                    .value =
+                    saved.style.selected;
+
+
+                document
+                    .getElementById(
+                        "backgroundColor"
+                    )
+                    .value =
+                    saved.style.background;
+
+
+                currentBackground =
+                    saved.style.backgroundMode
+                    ||
+                    "solid";
+
+            }
+
+
+            selected =
+                null;
+
+
+            render();
+
+        }
+    );
+
+
+
+/* =========================================================
+   DELETE SAVED POSE
+========================================================= */
 
 function deleteSavedPose() {
 
-  const select =
-    document.getElementById("savedPoses");
+    const select =
+        document
+            .getElementById(
+                "savedPoses"
+            );
 
-  const name = select.value;
 
-  if (!name) return;
+    const name =
+        select.value;
 
-  const saved = getSaved();
 
-  delete saved[name];
+    if (!name) {
 
-  localStorage.setItem(
-    "mediapipeHandPoses",
-    JSON.stringify(saved)
-  );
+        return;
 
-  refreshSavedList();
+    }
 
-  showStatus(
-    `"${name}" deleted.`
-  );
+
+    const saved =
+        getSaved();
+
+
+    delete saved[name];
+
+
+    localStorage.setItem(
+
+        "mediapipeHandPoses",
+
+        JSON.stringify(
+            saved
+        )
+
+    );
+
+
+    refreshSavedList();
+
+
+    showStatus(
+        `"${name}" deleted.`
+    );
+
 }
 
 
-// ------------------------------------------------------------
-// Status
-// ------------------------------------------------------------
+
+/* =========================================================
+   STATUS MESSAGE
+========================================================= */
 
 function showStatus(message) {
 
-  const el =
-    document.getElementById("status");
+    const element =
+        document
+            .getElementById(
+                "status"
+            );
 
-  el.textContent = message;
 
-  clearTimeout(showStatus.timer);
+    element.textContent =
+        message;
 
-  showStatus.timer =
-    setTimeout(() => {
-      el.textContent = "";
-    }, 2500);
+
+    clearTimeout(
+        showStatus.timer
+    );
+
+
+    showStatus.timer =
+        setTimeout(
+            () => {
+
+                element.textContent =
+                    "";
+
+            },
+            2500
+        );
+
 }
 
 
-// ------------------------------------------------------------
-// Init
-// ------------------------------------------------------------
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
 refreshSavedList();
+
 render();
+
 
 </script>
 
